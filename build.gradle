@@ -1,0 +1,33 @@
+group 'com.segment'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+mainClassName = "com.segment.wikiracer.Main"
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main.java.srcDir "src/main/java"
+    main.resources.srcDir "src/main/resources"
+}
+
+dependencies {
+
+    compile 'org.apache.httpcomponents:httpclient:4.5.3'
+    compile 'org.jsoup:jsoup:1.10.2'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.segment.wikiracer.Main'
+        )
+    }
+}
