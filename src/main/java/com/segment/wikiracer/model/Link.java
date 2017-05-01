@@ -1,12 +1,12 @@
 package com.segment.wikiracer.model;
 
 /**
- * Representation class of a HREF link
+ * Representation class of a HREF link node on a link graph
  */
-public class Link {
-    String title;
-    String url;
-    Link parent;
+public class Link{
+    private String title;
+    private String url;
+    private Link parent;
 
     public Link(String title, String url, Link link) {
         this.title = title;
@@ -38,7 +38,7 @@ public class Link {
 
     @Override
     public int hashCode() {
-        int result = 31 * (url != null ? url.hashCode() : 0);
-        return result;
+        return  31 * (url != null ? url.hashCode() : 0);
     }
+
 }
