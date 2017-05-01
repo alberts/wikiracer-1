@@ -1,27 +1,21 @@
 package com.segment.wikiracer;
 
-import com.segment.wikiracer.util.LinkHelper;
+import com.segment.wikiracer.model.Link;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Main {
 
     private static String domain;
     private static boolean verbosity = false;
+    private static final int DEFAULT_NUM_THREADS = 30;
+    private static Map<Argument, String> argsMap = new HashMap<>();
 
     //List of supported arguments
     private enum Argument {
         START, FINISH, DOMAIN, THREAD, VERBOSE, HELP
     }
-
-    private static final int DEFAULT_NUM_THREADS = 30;
-    private static ExecutorService executor;
-
-    private static Map<Argument, String> argsMap = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -29,19 +23,11 @@ public class Main {
 
         setDomain();
 
-        setThreadPool();
-
         setVerbosity();
 
-        Traverser traverser = new Traverser(argsMap.get(Argument.FINISH), domain, new Date(), executor, verbosity);
-        traverser.traverse(LinkHelper.wikify(argsMap.get(Argument.START), domain), argsMap.get(Argument.START), new Path());
-
-        while (!executor.isTerminated()) {
-
-        }
-        System.out.println("Can not find a path to the end!");
-        System.out.println("Finish at: " + System.currentTimeMillis());
-
+        Racer racer = new Racer(argsMap.get(Argument.FINISH), getThreads(), verbosity);
+        Link startLink = new Link(argsMap.get(Argument.START), wikify(argsMap.get(Argument.START), domain), null);
+        racer.race(startLink);
     }
 
     private static void parseArguments(String[] args) {
@@ -84,7 +70,7 @@ public class Main {
         }
 
         if (argsMap.get(Argument.START) == null || argsMap.get(Argument.FINISH) == null || argsMap.get(Argument.START).isEmpty() || argsMap.get(Argument.FINISH).isEmpty()) {
-            throw new IllegalArgumentException("Missing required start and end arguments! Try '-h' for help");
+            throw new IllegalArgumentException("Missing required start and finish arguments! Try '-h' for help");
         }
     }
 
@@ -92,10 +78,9 @@ public class Main {
         verbosity = Boolean.valueOf(argsMap.get(Argument.VERBOSE));
     }
 
-    private static void setThreadPool() {
+    private static int getThreads() {
 
-        int threads = argsMap.get(Argument.THREAD) == null || argsMap.get(Argument.THREAD).isEmpty() ? DEFAULT_NUM_THREADS : Integer.valueOf(argsMap.get(Argument.THREAD));
-        executor = Executors.newFixedThreadPool(threads);
+        return argsMap.get(Argument.THREAD) == null || argsMap.get(Argument.THREAD).isEmpty() ? DEFAULT_NUM_THREADS : Integer.valueOf(argsMap.get(Argument.THREAD));
     }
 
     private static void setDomain() {
@@ -104,4 +89,9 @@ public class Main {
         domain = argsMap.get(Argument.DOMAIN);
         domain = domain == null || domain.isEmpty() ? "https://en.wikipedia.org/wiki/" : domain;
     }
+
+    private static String wikify(String pageTitle, String domain) {
+        return domain + pageTitle.replace(" ", "_");
+    }
+
 }
