@@ -25,14 +25,16 @@ public class Path {
         return nodes;
     }
 
-    protected void print() {
+    public String toString() {
+        StringBuilder output = new StringBuilder();
         for (int i = 0; i < nodes.size(); i++) {
             if (nodes.size() == 1 || i == nodes.size() - 1) {
-                System.out.println(nodes.get(nodes.size() - 1));
+                output.append(nodes.get(nodes.size() - 1));
             } else {
-                System.out.print(nodes.get(i) + " --> ");
+                output.append(nodes.get(i)).append(" --> ");
             }
         }
+        return output.toString();
     }
 
 }

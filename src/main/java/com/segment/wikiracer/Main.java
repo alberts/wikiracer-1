@@ -2,6 +2,7 @@ package com.segment.wikiracer;
 
 import com.segment.wikiracer.util.LinkHelper;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -17,14 +18,12 @@ public class Main {
         START, FINISH, DOMAIN, THREAD, VERBOSE, HELP
     }
 
-    private static final int DEFAULT_NUM_THREADS = 100;
+    private static final int DEFAULT_NUM_THREADS = 30;
     private static ExecutorService executor;
 
     private static Map<Argument, String> argsMap = new HashMap<>();
 
     public static void main(String[] args) {
-
-        System.out.println("Starting at: " + System.currentTimeMillis());
 
         parseArguments(args);
 
@@ -34,10 +33,9 @@ public class Main {
 
         setVerbosity();
 
-        Traverser traverser = new Traverser(argsMap.get(Argument.FINISH), domain, executor, verbosity);
+        Traverser traverser = new Traverser(argsMap.get(Argument.FINISH), domain, new Date(), executor, verbosity);
         traverser.traverse(LinkHelper.wikify(argsMap.get(Argument.START), domain), argsMap.get(Argument.START), new Path());
 
-        executor.shutdown();
         while (!executor.isTerminated()) {
 
         }
