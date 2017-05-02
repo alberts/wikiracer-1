@@ -98,8 +98,8 @@ public class Main {
 
     private static void printHelp() {
         System.out.println("Wikiracer -- Allow you to find the path to traverse from one wiki link to another\n" +
-        "USAGE\n" +
-        "wikiracer [OPTIONS] [-s start] [-f finish]\n" +
+                "USAGE\n" +
+                "wikiracer [OPTIONS] [-s start] [-f finish]\n" +
                 "EXAMPLE:\n" +
                 "wikiracer -s \"rafa\" -f \"internet\"\n" +
                 "DESCRIPTION:\n" +

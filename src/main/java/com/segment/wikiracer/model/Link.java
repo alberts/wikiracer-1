@@ -1,17 +1,23 @@
 package com.segment.wikiracer.model;
 
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 /**
  * Representation class of a HREF link node on a link graph
  */
-public class Link{
+public class Link {
     private String title;
     private String url;
-    private Link parent;
+    private Queue<String> path = new ConcurrentLinkedQueue<>();
 
     public Link(String title, String url, Link link) {
         this.title = title;
         this.url = url;
-        this.parent = link;
+        if (link != null) {
+            path.addAll(link.getPath());
+        }
+        path.add(title);
     }
 
     public String getTitle() {
@@ -22,9 +28,6 @@ public class Link{
         return url;
     }
 
-    public Link getParent() {
-        return parent;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -38,7 +41,11 @@ public class Link{
 
     @Override
     public int hashCode() {
-        return  31 * (url != null ? url.hashCode() : 0);
+        return 31 * (title != null ? title.hashCode() : 0);
+    }
+
+    public Queue<String> getPath() {
+        return path;
     }
 
 }
