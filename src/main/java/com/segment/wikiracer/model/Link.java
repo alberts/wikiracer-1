@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Representation class of a HREF link node on a link graph
  */
-public class Link {
+public class Link implements Comparable<Link>{
     private String title;
     private String url;
     private Queue<String> path = new ConcurrentLinkedQueue<>();
@@ -14,7 +14,7 @@ public class Link {
     public Link(String title, String url, Link link) {
         this.title = title;
         this.url = url;
-        if (link != null) {
+        if(link != null) {
             path.addAll(link.getPath());
         }
         path.add(title);
@@ -41,11 +41,15 @@ public class Link {
 
     @Override
     public int hashCode() {
-        return 31 * (title != null ? title.hashCode() : 0);
+        return  31 * (title != null ? title.hashCode() : 0);
     }
 
     public Queue<String> getPath() {
         return path;
     }
 
+    @Override
+    public int compareTo(Link o) {
+        return this.equals(o) ? 0 : -1;
+    }
 }
